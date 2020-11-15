@@ -13,7 +13,7 @@ export default function UpdateArticle() {
   const { register, errors, reset, handleSubmit, control } = useForm();
 
         const onSubmit = (article, file) => {
-        ArticleService.update(article);
+        ArticleService.update(article)};
         const id = uuid();
         const uploadImage = storage.ref("images").child(id);
         uploadImage.put(file[0])
@@ -21,7 +21,7 @@ export default function UpdateArticle() {
         .then(() => alert("done"))
         .catch(error => console.log(error));
 
-  };
+  
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -69,6 +69,7 @@ export default function UpdateArticle() {
 
         <Grid item xs={12}>
         <input ref={register} name="image" type="file" accept=".jpg" />
+        <button onClick={handleUpload}>Upload</button>
         </Grid>
         <Grid item xs={12}>
           <Button

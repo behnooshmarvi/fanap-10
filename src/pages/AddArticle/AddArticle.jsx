@@ -5,26 +5,44 @@ import Button from "components/Button";
 import { ArticleService } from "components/Article";
 import { useForm,Controller } from "react-hook-form";
 import { storage } from "services/firebase";
-import { v4 as uuid } from "uuid";
+//import { v4 as uuid } from "uuid";
 import WYSIWYGEditor from "components/Article/editor";
 
 
 export default function AddArticle() {
   const { register, errors, reset, handleSubmit, control } = useForm();
 
-        const onSubmit = (article, file) => {
+        const onSubmit = (article,data) => {
         ArticleService.create(article);
-        const id = uuid();
-        const uploadImage = storage.ref("images").child(id);
-        uploadImage.put(file[0])
- 
-        .then(() => alert("done"))
-        .catch(error => console.log(error));
-       // uploadImage.on('state_changed/', 
-        //(snapShot) => {
-       //   console.log(snapShot)
+        ////const id = uuid();
+          const uploadRef= storage.ref("images").child("data");
+          uploadRef.put(data).then(() => {
+            alert("done");
+          }
+          );
+
+        
+        //const id = uuid();
+        
+      //  uploadImage.on("state_changed",
+      //  snapshot => {},
+      //  error => {
+          // console.log(error);
+//         },
+//         () => {
+//           storage
+//           .ref("images")
+//           .child(image.name)
+//           .getDownloadURL()
+//           .then(
+//             url =>{
+// console.log(url);
+//             });
+//           }
+//           );
+        };
       
-  };
+  
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -87,7 +105,7 @@ export default function AddArticle() {
         
 
         <Grid item xs={12}>
-        <input ref={register} name="image" type="file" accept=".jpg" />
+        <input inputRef={register} name="image" type="file" accept=".jpg"  />
         </Grid>
 
         <Grid item xs={12}>
