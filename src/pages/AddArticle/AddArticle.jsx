@@ -3,46 +3,50 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/Button";
 import { ArticleService } from "components/Article";
-import { useForm,Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { storage } from "services/firebase";
-//import { v4 as uuid } from "uuid";
+import { v4 as uuid } from "uuid";
 import WYSIWYGEditor from "components/Article/editor";
-
 
 export default function AddArticle() {
   const { register, errors, reset, handleSubmit, control } = useForm();
 
-        const onSubmit = (article,data) => {
-        ArticleService.create(article);
-        ////const id = uuid();
-          const uploadRef= storage.ref("images").child("data");
-          uploadRef.put(data).then(() => {
-            alert("done");
-          }
-          );
+  const onSubmit = (formData) => {
+    ArticleService.create(formData);
+    const image = formData.image[0];
+    const body = formData.body;
+    const title = formData.title;
+    const date = formData.Date;
+    const id = uuid();
+    const uploadImage = storage.ref("images");
+    uploadImage
+      .put(image)
+      .then(() => alert("done"))
+      .catch((error) => console.log(error));
 
-        
-        //const id = uuid();
-        
-      //  uploadImage.on("state_changed",
-      //  snapshot => {},
-      //  error => {
-          // console.log(error);
-//         },
-//         () => {
-//           storage
-//           .ref("images")
-//           .child(image.name)
-//           .getDownloadURL()
-//           .then(
-//             url =>{
-// console.log(url);
-//             });
-//           }
-//           );
-        };
-      
-  
+    console.log("\n\n ----- onSubmit -----");
+    console.log("image = ", image);
+    console.log("body = ", body);
+    console.log("title = ", title);
+    console.log("date = ", date);
+    console.log("id = ", id); 
+    console.log("uploadImage = ", uploadImage);
+    console.log("storage.ref('images') = ", storage.ref("images"));
+
+    storage
+      .ref("images")
+      .child(image.name)
+      .getDownloadURL()
+      .then((url) => {
+        console.log("url = ", url);
+      });
+
+    console.log("----- onSubmit -----\n\n");
+
+    // uploadImage.on('state_changed/',
+    //(snapShot) => {
+    //   console.log(snapShot)
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -58,34 +62,28 @@ export default function AddArticle() {
               required: "Title is required",
               maxLength: {
                 value: 250,
-                message: "Title must be less than 250 characters"
-              }
+                message: "Title must be less than 250 characters",
+              },
             })}
             error={!!errors.title}
-            helperText={!!errors.title && errors.title.message}>
-              
-            </TextField>
-            
-          
-          
+            helperText={!!errors.title && errors.title.message}
+          ></TextField>
         </Grid>
 
         <Grid item xs={24}>
-        
-        <Controller
-          as={<WYSIWYGEditor />}
-          name="body"
-          control={control}
-          label="Body"
-          defaultValue=""
-          variant="outlined"
-          multiline
-          fullWidth
-          inputRef={register({ required: "Body is required" })}
-          error={!!errors.body}
-          helperText={!!errors.body && errors.body.message}
-        />
-
+          <Controller
+            as={<WYSIWYGEditor />}
+            name="body"
+            control={control}
+            label="Body"
+            defaultValue=""
+            variant="outlined"
+            multiline
+            fullWidth
+            inputRef={register({ required: "Body is required" })}
+            error={!!errors.body}
+            helperText={!!errors.body && errors.body.message}
+          />
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -94,18 +92,12 @@ export default function AddArticle() {
             defaultValue={new Date()}
             variant="outlined"
             fullWidth
-            inputRef={register }>
-
-              
-            </TextField>
-            
-          
-          
+            inputRef={register}
+          ></TextField>
         </Grid>
-        
 
         <Grid item xs={12}>
-        <input inputRef={register} name="image" type="file" accept=".jpg"  />
+          <input ref={register} name="image" type="file" accept=".jpg" />
         </Grid>
 
         <Grid item xs={12}>

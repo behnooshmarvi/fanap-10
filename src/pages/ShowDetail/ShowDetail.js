@@ -1,7 +1,7 @@
 import React, { useState,useEffect} from 'react';
 import  * as firebase from "services";
 import { TextField } from '@material-ui/core';
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 
 
 const Articles =(props) => {
@@ -29,11 +29,7 @@ const [articleList , setArticleList] = useState([])
       
    })
 
-  const history = useHistory();
-  function handleShowDetail(id) {
-    history.push("/showdetail");
 
-  }
 
     return (
       <div className="MainDiv">
@@ -50,22 +46,11 @@ const [articleList , setArticleList] = useState([])
               </thead>
               <tbody>
 
-             { articleList.map((data,i)=> {
+             { articleList.map((data,id)=> {
                   return (
-                      <tr key ={i}>     
-                      <TextField id={data.key} value={data.title} variant="outlined"  style={{width:"200px"}}/>
-                      <button onClick={handleShowDetail}>show detail</button>
-                      </tr>
-                      
-                  );
-                 
-                  })}
-
-            { articleList.map((data,i)=> {
-                  return (
-                      <tr key ={i}>     
-                      <TextField id={data.key} value={data.body} variant="outlined"  style={{width:"300px"}}/>
-                      <button onClick={handleShowDetail}>show detail</button>
+                      <tr>     
+                      <TextField value={data.title} variant="outlined"  style={{width:"200px"}}/>
+                      <TextField value={data.body} variant="outlined"  style={{width:"300px"}}/>
                       </tr>
                       
                   );

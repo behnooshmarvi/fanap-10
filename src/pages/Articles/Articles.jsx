@@ -30,7 +30,7 @@ const [articleList , setArticleList] = useState([])
    })
 
   const history = useHistory();
-  function handleShowDetail(id) {
+  function handleShowDetail() {
     history.push("/showdetail");
 
   }
